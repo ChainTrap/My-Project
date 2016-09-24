@@ -1,0 +1,148 @@
+// Checkbox ------------------------------
+
+// Variables
+@black:                        #000000;
+@white:                        #ffffff;
+@swatch-grey-400:              #bdbdbd;
+@swatch-primary:               #3f51b5;
+@standard-curve:               cubic-bezier(0.4, 0, 0.2, 1);
+@box-transition:               border-color .28s @standard-curve, background-color .28s @standard-curve;
+@check-transition:             opacity .2s @standard-curve;
+@ripple-animation-name:        _CHECKBOX-RIPPLE-ON;
+@ripple-animation-duration:    500ms;
+@ripple-animation-timing:      @standard-curve;
+
+
+// Mixins
+.animation-name(@animation-name) {
+  -webkit-animation-name: @animation-name;
+          animation-name: @animation-name;
+}
+.animation-duration(@animation-duration) {
+  -webkit-animation-duration: @animation-duration;
+          animation-duration: @animation-duration;
+}
+.animation-timing(@animation-timing-function) {
+  -webkit-animation-timing-function: @animation-timing-function;
+          animation-timing-function: @animation-timing-function;
+}
+.box-sizing(@box-sizing) {
+  -webkit-box-sizing: @box-sizing;
+     -moz-box-sizing: @box-sizing;
+          box-sizing: @box-sizing;
+}
+.scale(@scale) {
+  -webkit-transform: scale(@scale);
+      -ms-transform: scale(@scale);
+       -o-transform: scale(@scale);
+          transform: scale(@scale);
+}
+.transition(@transition) {
+  -webkit-transition: @transition;
+       -o-transition: @transition;
+          transition: @transition;
+}
+
+
+// Hide the default checkbox.
+input[type="checkbox"] {
+  opacity: 0;
+}
+
+
+// Checkbox box style.
+.checkbox-box {
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: -2px;
+  height: 16px;
+  width: 16px;
+  .box-sizing(border-box);
+  border: 2px solid fade(@black, 54%);
+  border-radius: 2px;
+  background-color: transparent;
+  z-index: 2;
+  cursor: pointer;
+  .transition(@box-transition);
+  
+  &.is-checked {
+    border-color: @swatch-primary;
+    background-color: @swatch-primary;
+  }
+  &.is-disabled {
+    border-color: @swatch-grey-400;
+    background-color: @swatch-grey-400;
+  }
+  &:disabled:not(:checked) {  background-color: transparent;  }
+}
+
+
+// Checkbox tick mark.
+// Using the material design icon for the check mark.
+.checkbox-check {
+  &:after {
+    content: "\e5ca";  // Material icon 'check'.
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: -1px;
+    color: @white;
+    opacity: 0;
+    font-family: "Material Icons";
+    font-style: normal;
+    text-transform: none;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;  // Support for all WebKit browsers.
+    text-rendering: optimizeLegibility;  // Support for Safari and Chrome.
+    -moz-osx-font-smoothing: grayscale;  // Support for Firefox.
+    font-feature-settings: "liga";  // Support for IE.
+    z-index: 2;
+    cursor: pointer;
+    .transition(@check-transition);
+  }
+
+  &.is-checked:after,
+  &.is-disabled:after {
+    opacity: 1;
+  }
+  &:disabled:not(:checked):after {  opacity: 0;  }
+}
+
+
+// Checkbox ripple effect.
+.checkbox-ripple {
+  position: absolute;
+  top: -11px;
+  left: -15px;
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  -webkit-mask-image: -webkit-radial-gradient(circle, white, black);
+  z-index: 2;
+  cursor: none;
+  .scale(0);
+
+  &.ripple-on {
+    background-color: @swatch-primary;
+    .animation-name(@ripple-animation-name);
+    .animation-duration(@ripple-animation-duration);
+    .animation-timing(@ripple-animation-timing);
+  }
+  &.is-disabled {  visibility: hidden;  }
+}
+@-webkit-keyframes @{ripple-animation-name} {
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+@keyframes @{ripple-animation-name} {
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
